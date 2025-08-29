@@ -4,6 +4,7 @@
     "npm:@eslint/js@^9.33.0": "9.34.0",
     "npm:@tanstack/query-db-collection@~0.2.8": "0.2.8_@tanstack+query-core@5.85.5_typescript@5.8.3",
     "npm:@tanstack/react-db@~0.1.9": "0.1.9_react@19.1.1_typescript@5.8.3",
+    "npm:@tanstack/react-query@^5.85.5": "5.85.5_react@19.1.1",
     "npm:@types/react-dom@^19.1.7": "19.1.9_@types+react@19.1.12",
     "npm:@types/react@^19.1.10": "19.1.12",
     "npm:@vitejs/plugin-react@5": "5.0.2_vite@7.1.3__picomatch@4.0.3_@babel+core@7.28.3",
@@ -543,6 +544,13 @@
         "@tanstack/db",
         "react",
         "use-sync-external-store"
+      ]
+    },
+    "@tanstack/react-query@5.85.5_react@19.1.1": {
+      "integrity": "sha512-/X4EFNcnPiSs8wM2v+b6DqS5mmGeuJQvxBglmDxl6ZQb5V26ouD2SJYAcC3VjbNwqhY2zjxVD15rDA5nGbMn3A==",
+      "dependencies": [
+        "@tanstack/query-core",
+        "react"
       ]
     },
     "@types/babel__core@7.20.5": {
@@ -1418,6 +1426,7 @@
         "npm:@eslint/js@^9.33.0",
         "npm:@tanstack/query-db-collection@~0.2.8",
         "npm:@tanstack/react-db@~0.1.9",
+        "npm:@tanstack/react-query@^5.85.5",
         "npm:@types/react-dom@^19.1.7",
         "npm:@types/react@^19.1.10",
         "npm:@vitejs/plugin-react@5",
