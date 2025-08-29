@@ -13,6 +13,19 @@ const client = postgres(connectionString);
 const db = drizzle(client);
 
 const app = new Elysia()
+  .use((app) => 
+    app.onRequest(({ set }) => {
+      set.headers['Access-Control-Allow-Origin'] = '*';
+      set.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+      set.headers['Access-Control-Allow-Headers'] = 'Content-Type';
+    })
+  )
+  .options('*', ({ set }) => {
+    set.headers['Access-Control-Allow-Origin'] = '*';
+    set.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
+    set.headers['Access-Control-Allow-Headers'] = 'Content-Type';
+    return '';
+  })
   .get("/", () => "Hello Elysia")
   .get("/todos", async () => {
     const allTodos = await db.select().from(todos);

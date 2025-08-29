@@ -9,52 +9,67 @@ export interface Todo {
   createdAt: number
 }
 
-// Mock API functions for demonstration
-const mockTodos: Todo[] = [
-  { id: '1', text: 'Learn TanStack DB', completed: false, createdAt: Date.now() - 3600000 },
-  { id: '2', text: 'Build a todo app', completed: false, createdAt: Date.now() - 1800000 },
-  { id: '3', text: 'Deploy to production', completed: false, createdAt: Date.now() }
-]
+// API base URL for Elysia backend
+const API_BASE_URL = 'http://localhost:3000'
 
-const mockFetchTodos = async (): Promise<Todo[]> => {
-  await new Promise(resolve => setTimeout(resolve, 300))
-  return [...mockTodos]
+const fetchTodos = async (): Promise<Todo[]> => {
+  const response = await fetch(`${API_BASE_URL}/todos`)
+  if (!response.ok) {
+    throw new Error('Failed to fetch todos')
+  }
+  return response.json()
 }
 
-const mockUpdateTodo = async (todo: Todo): Promise<Todo> => {
-  await new Promise(resolve => setTimeout(resolve, 200))
-  console.log('Mock API: Updated todo', todo)
-  return todo
+const updateTodo = async (todo: Todo): Promise<Todo> => {
+  const response = await fetch(`${API_BASE_URL}/todos/${todo.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(todo)
+  })
+  if (!response.ok) {
+    throw new Error('Failed to update todo')
+  }
+  return response.json()
 }
 
-const mockCreateTodo = async (todo: Todo): Promise<Todo> => {
-  await new Promise(resolve => setTimeout(resolve, 200))
-  console.log('Mock API: Created todo', todo)
-  return todo
+const createTodo = async (todo: Todo): Promise<Todo> => {
+  const response = await fetch(`${API_BASE_URL}/todos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(todo)
+  })
+  if (!response.ok) {
+    throw new Error('Failed to create todo')
+  }
+  return response.json()
 }
 
-const mockDeleteTodo = async (todo: Todo): Promise<void> => {
-  await new Promise(resolve => setTimeout(resolve, 200))
-  console.log('Mock API: Deleted todo', todo)
+const deleteTodo = async (todo: Todo): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/todos/${todo.id}`, {
+    method: 'DELETE'
+  })
+  if (!response.ok) {
+    throw new Error('Failed to delete todo')
+  }
 }
 
 // Define a collection that loads data using TanStack Query
 export const todoCollection = createCollection(
   queryCollectionOptions({
     queryKey: ['todos'],
-    queryFn: mockFetchTodos,
+    queryFn: fetchTodos,
     getKey: (item) => item.id,
     onInsert: async ({ transaction }) => {
       const { modified: newTodo } = transaction.mutations[0]
-      await mockCreateTodo(newTodo as Todo)
+      await createTodo(newTodo as Todo)
     },
     onUpdate: async ({ transaction }) => {
       const { modified } = transaction.mutations[0]
-      await mockUpdateTodo(modified as Todo)
+      await updateTodo(modified as Todo)
     },
     onDelete: async ({ transaction }) => {
       const { original } = transaction.mutations[0]
-      await mockDeleteTodo(original as Todo)
+      await deleteTodo(original as Todo)
     },
     queryClient: new QueryClient()
   })
